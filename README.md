@@ -97,6 +97,10 @@ Each command keeps its own tab: running a second command opens a second console 
 the first, and running one again focuses the console it already has. The tabs belong to the session, so
 each conversation shows its own.
 
+A console keeps reading the host, so it stays honest about what it is showing. If the harness restarts
+underneath it — which forgets every run — the tab says the run is no longer known instead of pretending,
+and if a read fails it says so and retries without losing the output already on screen.
+
 ## Managing what is in the menu
 
 Each row's three-dot handle opens that row's options on top of the list, which stays open behind

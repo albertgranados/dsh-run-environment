@@ -7,6 +7,22 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.7.1] - 2026-09-17
+
+### Fixed
+
+- **A console no longer mistakes a lost run for a broken one.** Restarting the harness forgets every
+  run it was managing, so an open console's next read answers 404 — which the tab now reports as what
+  it is ("This run is no longer known to the harness. It may have restarted."), with no error line and
+  no lost output. A read that fails for any other reason — the host restarting mid-poll, a dropped
+  connection — keeps the output already on screen, says it is retrying with the raw reason in its
+  tooltip, and clears itself on the next good read.
+
+### Changed
+
+- The console polls to match what it is showing: once a second while the run is alive, and every few
+  seconds otherwise, so a finished console still notices the next run of its command.
+
 ## [0.7.0] - 2026-09-17
 
 ### Added
@@ -272,7 +288,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.4...v0.7.0
 [0.6.4]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.3...v0.6.4
 [0.6.3]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.2...v0.6.3
