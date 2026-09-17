@@ -99,7 +99,9 @@ each conversation shows its own.
 
 A console keeps reading the host, so it stays honest about what it is showing. If the harness restarts
 underneath it — which forgets every run — the tab says the run is no longer known instead of pretending,
-and if a read fails it says so and retries without losing the output already on screen.
+and if a read fails it names what failed (the host answering, or the host being unreachable) and retries
+without losing the output already on screen. Whenever the command is not running, the bar offers **Run
+again**, so a console whose run is gone is a way back rather than a dead end.
 
 ## Managing what is in the menu
 
