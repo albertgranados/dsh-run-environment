@@ -7,6 +7,17 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-09-17
+
+### Fixed
+
+- **The view enforces the two ordering rules, not just the host.** "The default leads, hidden rows
+  follow" is decided on the host, so a browser running a newer client than the harness it is talking
+  to — which is what happens when a plugin is updated and only the page is reloaded — could show the
+  default wherever the older host left it. The client now applies the same two rules to whatever it is
+  served. The sort is stable, so everything else keeps the order it arrived in, and the rules cannot
+  disagree: they are the same two.
+
 ## [0.6.0] - 2026-09-17
 
 ### Added
@@ -216,7 +227,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.1...HEAD
+[0.6.1]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.3.0...v0.4.0
