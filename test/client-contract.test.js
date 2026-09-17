@@ -13,12 +13,14 @@ const primitiveNames = [
 	'IconAlarmClockOutline16',
 	'IconApiOutline14',
 	'IconBranchOutline16',
+	'IconCheckOutline16',
 	'IconChecklistOutline14',
 	'IconChevronDownOutline14',
 	'IconCodeOutline16',
 	'IconCordisPluginOutline14',
 	'IconDataOutline16',
 	'IconDatabaseOutline16',
+	'IconEditOutline16',
 	'IconEllipsisOutline16',
 	'IconFolderOpenOutline16',
 	'IconGaugeOutline16',
@@ -29,6 +31,7 @@ const primitiveNames = [
 	'IconRefreshOutline16',
 	'IconSparkle16',
 	'IconStopFill16',
+	'IconTrashOutline16',
 	'IconWarningOutline16',
 ];
 

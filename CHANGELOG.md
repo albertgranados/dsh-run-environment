@@ -7,6 +7,23 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.6] - 2026-09-17
+
+### Changed
+
+- **Deleting a user-defined command moved onto the row it belongs to.** The **Manage** section no
+  longer carries a "Delete a custom command" submenu: a user-defined command's own options offer
+  **Delete**, in red, beside **Set as default** and **Edit**. Detected commands have no Delete — they
+  belong to their manifest and are hidden instead.
+- **The row options carry icons** (a check, a pencil, a trash can), and **Edit** lost its trailing
+  ellipsis, which said nothing the icon does not.
+
+### Fixed
+
+- The row options no longer depend on the command list staying open: they dismiss themselves on Escape
+  and on a pointer outside them, so a pointer *inside* them can never tear them down before the click
+  that picks an option lands.
+
 ## [0.2.5] - 2026-09-17
 
 ### Changed
@@ -117,7 +134,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.5...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.6...HEAD
+[0.2.6]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.5...v0.2.6
 [0.2.5]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.4...v0.2.5
 [0.2.4]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.2...v0.2.3

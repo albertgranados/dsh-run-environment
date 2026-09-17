@@ -32,9 +32,9 @@ glyph, without touching the manifest:
   path to teach the plugin. Detection is adapter-based, so other environments plug into the same
   model, and the menu groups commands by the file that declared them (`package.json`, `Makefile`, …).
 - **Rename and give them icons.** Every row carries an icon — a neutral asterisk until you pick
-  another — and its own options: **Set as default**, or **Edit…** to rename it and choose a glyph.
-  A user-defined command's command line is editable too; a detected one's is not, because it belongs
-  to the manifest.
+  another — and its own options: **Set as default**, **Edit** (rename it, choose a glyph) and, for a
+  command you defined yourself, **Delete**. A user-defined command's command line is editable too; a
+  detected one's is not, because it belongs to the manifest.
 - **A play button that means something.** The default is `dev`, then `start`, then whatever the
   manifest declares first — ranked by the adapter, resolved on the host.
 - **Run and stop.** While a command is alive the button turns into a stop button; stopping terminates
@@ -66,19 +66,19 @@ Uninstall with `dsh plugin --profile web remove dsh-run-environment`.
 
 ## Managing what is in the menu
 
-Each row's three-dot handle opens **Set as default** and **Edit…** on top of the list, which stays
-open behind them:
+Each row's three-dot handle opens that row's options on top of the list, which stays open behind
+them:
 
-![A command row's options: set as default, or edit](docs/assets/row-options.png)
+![A command row's options: set as default, edit, or delete](docs/assets/row-options.png)
 
 - **Set as default** moves the play button onto that command. Running a command from the menu also
   makes it the default, so the button follows the last thing you picked.
-- **Edit…** renames the command and chooses its icon. A user-defined command's command line is
-  editable there too; a detected command's is not, because it belongs to the manifest — the dialog
-  says so instead of pretending.
-- **Hide a command** (in **Manage**) takes a detected command out of the menu; it stays restorable
-  from **Show hidden (n)**. User-defined commands are deleted rather than hidden, since nothing would
-  bring them back.
+- **Edit** renames the command and chooses its icon. A user-defined command's command line is editable
+  there too; a detected command's is not, because it belongs to the manifest — the dialog says so
+  instead of pretending.
+- **Delete** removes a command you defined, and is offered only for those. A detected command belongs
+  to its manifest, so **Manage → Hide a command** hides it instead, and **Show hidden (n)** brings it
+  back.
 
 ## How it works
 
