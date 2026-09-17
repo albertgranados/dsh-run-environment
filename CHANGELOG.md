@@ -7,6 +7,15 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.8] - 2026-09-17
+
+### Changed
+
+- **The default row lost its filled highlight.** The `default` pill is what marks it, so opening the
+  menu no longer looks like one row is stuck under the pointer.
+- **The pill is tighter**: 18px tall with 6px of side padding and a 10px label, instead of the
+  primitive's 24px and 8px, so it reads as a marker rather than a button.
+
 ## [0.2.7] - 2026-09-17
 
 ### Added
@@ -143,7 +152,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.7...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.8...HEAD
+[0.2.8]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.7...v0.2.8
 [0.2.7]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.6...v0.2.7
 [0.2.6]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.5...v0.2.6
 [0.2.5]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.4...v0.2.5
