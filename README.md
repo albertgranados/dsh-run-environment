@@ -45,6 +45,10 @@ glyph, without touching the manifest:
 
 ![A running command's row, with the green status dot in place of its icon](docs/assets/menu-running.png)
 
+The same dot replaces the header button's play icon while the default command is alive:
+
+![The header control wearing the green status dot](docs/assets/button-running.png)
+
 Pressing that row asks before it stops:
 
 ![The stop confirmation a running command's row opens](docs/assets/row-stop.png)

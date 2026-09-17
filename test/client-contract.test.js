@@ -32,7 +32,6 @@ const primitiveNames = [
 	'IconPlusOutline16',
 	'IconRefreshOutline16',
 	'IconSparkle16',
-	'IconStopFill16',
 	'IconTrashOutline16',
 	'IconWarningOutline16',
 ];

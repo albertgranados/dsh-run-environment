@@ -7,6 +7,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.6.4] - 2026-09-17
+
+### Changed
+
+- **The header control wears the status dot too.** While the default command is alive, the button's
+  play icon gives way to the same green dot the rows use, so "something is running" reads the same
+  wherever you look. Stopping was already behind the confirmation everywhere, and the tooltip says so.
+
 ## [0.6.3] - 2026-09-17
 
 ### Changed
@@ -245,7 +253,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.3...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.4...HEAD
+[0.6.4]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.3...v0.6.4
 [0.6.3]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.0...v0.6.1
