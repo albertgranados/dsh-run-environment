@@ -7,6 +7,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-09-17
+
+### Fixed
+
+- **A double click on "Edit…" (or on "Add command…") no longer swallows the dialog.** The second
+  click of the gesture landed on the mask of the dialog that had just appeared and dismissed it in
+  the same breath, which read as "the dialog does not open". A dialog now ignores closes for 300 ms
+  after it opens — the mask, Escape, and Cancel all behave normally from then on — so the gesture
+  that opens a dialog can never be the gesture that closes it.
+
 ## [0.2.1] - 2026-09-17
 
 ### Fixed
@@ -68,7 +78,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/albertgranados/dsh-run-environment/releases/tag/v0.1.0
