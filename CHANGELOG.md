@@ -7,6 +7,22 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-09-17
+
+### Added
+
+- **The menu names the build it is running.** `GET /commands` carries the plugin version and the menu
+  footer shows it, so "which bundle is this tab on?" — a real question, because the client half is
+  served from a revision computed when the harness boots — is answered by looking at the control.
+
+### Fixed
+
+- **A dialog now closes the command list when it opens.** The list stayed open behind the editor,
+  which put it at the same z-index junction as the modal (the menu sits at 100, the dialog's own
+  layer at 1) and left the dialog dependent on never overlapping the list. Dialogs dismiss the menu
+  they were called from, as every other dialog in the harness does; the row options still stack
+  without closing anything, which is what they are for.
+
 ## [0.2.2] - 2026-09-17
 
 ### Fixed
@@ -78,7 +94,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.1.0...v0.2.0

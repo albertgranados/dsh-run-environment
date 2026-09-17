@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -7,7 +8,7 @@ import test from 'node:test';
 import { nodeNpmAdapter } from '../lib/adapters/node-npm.js';
 import { ProjectStore } from '../lib/core/project-store.js';
 import { AdapterRegistry } from '../lib/core/registry.js';
-import { createRouter, ROUTE_PREFIX } from '../lib/core/router.js';
+import { createRouter, ROUTE_PREFIX, versionOfThisPackage } from '../lib/core/router.js';
 import { RunRegistry } from '../lib/core/runner.js';
 
 /** One request stand-in carrying an optional JSON body. */
@@ -224,6 +225,14 @@ test('POST /state hides, shows, and defines commands', async (t) => {
 
 	const remove = await call('/state', json({ cwd: directory, action: 'remove-custom', id: custom.id }));
 	assert.equal(remove.json.commands.some((command) => command.source === 'custom'), false);
+});
+
+test('GET /commands names the build it is serving', async (t) => {
+	const { call, directory } = await fixture(t);
+	const manifest = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+	assert.equal(versionOfThisPackage(), manifest.version, 'the published version is the package version');
+	const payload = (await call(`/commands?cwd=${encodeURIComponent(directory)}`)).json;
+	assert.equal(payload.version, manifest.version);
 });
 
 test('GET /commands publishes the icon set the picker offers', async (t) => {
