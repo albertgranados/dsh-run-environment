@@ -20,9 +20,17 @@ To run your checkout inside a harness:
 scripts/dev-install.sh          # or: scripts/dev-install.sh <profile>
 ```
 
-then restart the harness and reload the browser page. The script installs the package with `file:`
-(copied into the profile) rather than linking it — a linked package resolves its own imports from the
-checkout, where the harness packages it needs do not exist. Re-run it after every edit.
+then restart the harness and reload the browser page. Re-run it after every edit.
+
+Two details that make the script less naive than it looks, and that you will hit if you install by
+hand:
+
+- `dsh plugin add <directory>` **links** the source tree, and a linked package resolves its own
+  imports from the checkout — where the harness packages it needs (`@deepseek-ai/schemastery`, …) do
+  not exist. The script uses `file:`, which **copies** the package into the profile.
+- That copy is made of hard links, and `pnpm` trusts its lockfile entry, so a plain re-`add` will not
+  pick up an edit — particularly one made by an editor that replaces files atomically. The script
+  removes the installed directory first to force the copy.
 
 ## How work lands
 

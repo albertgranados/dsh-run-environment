@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
 
+import { emptyState } from '../lib/core/model.js';
 import { ProjectStore } from '../lib/core/project-store.js';
 
 /**
@@ -20,7 +21,7 @@ async function temporaryStore(testContext) {
 
 test('an absent state file reads as empty preferences', async (t) => {
 	const { store } = await temporaryStore(t);
-	assert.deepEqual(await store.read('/some/project'), { defaultId: null, hidden: [], custom: [] });
+	assert.deepEqual(await store.read('/some/project'), emptyState());
 });
 
 test('a mutation persists and is visible to a second store instance', async (t) => {
@@ -37,7 +38,7 @@ test('a mutation persists and is visible to a second store instance', async (t) 
 
 	const reopened = new ProjectStore({ file });
 	assert.deepEqual((await reopened.read('/some/project')).custom, [
-		{ id: 'custom:seed', label: 'Seed', command: 'npm run db:seed' },
+		{ id: 'custom:seed', label: 'Seed', command: 'npm run db:seed', icon: 'default' },
 	]);
 });
 
@@ -65,7 +66,7 @@ test('a hand-edited file that no longer parses is quarantined, not overwritten',
 	await writeFile(file, '{ this is not json', 'utf8');
 
 	const store = new ProjectStore({ file, logger: { warn: (message) => warnings.push(message) } });
-	assert.deepEqual(await store.read('/p'), { defaultId: null, hidden: [], custom: [] });
+	assert.deepEqual(await store.read('/p'), emptyState());
 	assert.equal(await readFile(`${file}.corrupt`, 'utf8'), '{ this is not json', 'the user keeps their bytes');
 	assert.equal(warnings.length, 1);
 });
@@ -76,7 +77,7 @@ test('a document of the wrong shape is treated as corrupt', async (t) => {
 	const file = join(directory, 'projects.json');
 	await writeFile(file, '["not","a","document"]', 'utf8');
 	const store = new ProjectStore({ file });
-	assert.deepEqual(await store.read('/p'), { defaultId: null, hidden: [], custom: [] });
+	assert.deepEqual(await store.read('/p'), emptyState());
 });
 
 test('the document is pruned to the least recently used projects', async (t) => {

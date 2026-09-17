@@ -24,10 +24,15 @@ not a failure.
  * @property {string} id        adapter-local key, unique within this adapter
  * @property {string} [label]   short menu label; defaults to the argv text
  * @property {string} [detail]  secondary text (usually the underlying command)
+ * @property {string} [manifest]  the file that declared it, used as the menu's
+ *   section title; defaults to the adapter's first watched path
  * @property {readonly string[]} argv  exact argv; argv[0] is a bare PATH program or an absolute path
  * @property {number} [priority]  lower runs first and wins the default; defaults to 100
  */
 ```
+
+Commands with the same `manifest` are shown together under that file name, which is what makes a
+workspace that is both a Node package and a Make project legible instead of a flat list.
 
 ## The workspace API
 
@@ -66,6 +71,7 @@ export const makeAdapter = {
       .map((target) => ({
         id: target,
         label: `make ${target}`,
+        manifest: 'Makefile',
         argv: ['make', target],
         priority: target === 'run' || target === 'dev' ? 10 : undefined,
       }));
@@ -93,10 +99,15 @@ temporary directory, call `detect`, assert the command list. No harness, no mock
    ecosystems can both expose a `test` target without colliding.
 6. **Rank what you know.** `dev`/`start`-style entry points get a low `priority`; everything else
    keeps the default and stays in manifest order.
-7. **Keep ids addressable.** They travel in URLs and stored preferences, so avoid whitespace, quotes,
+7. **Name the manifest that matched.** `manifest` is what the menu shows as the section title, so a
+   reader knows where a command came from — and where to edit it.
+8. **Keep ids addressable.** They travel in URLs and stored preferences, so avoid whitespace, quotes,
    and shell metacharacters — `test/node-npm.test.js` shows the shape the npm adapter accepts.
-8. **Do not assume a program exists.** `argv[0]` is resolved through the harness's execution world;
+9. **Do not assume a program exists.** `argv[0]` is resolved through the harness's execution world;
    a missing program becomes a 502 with a clear message, which is the right outcome.
+
+You do not have to think about renames, icons, hiding, or defaults: those are per-command
+preferences the model folds in on top of whatever you return.
 
 ## Checklist for a new adapter
 

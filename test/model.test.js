@@ -7,8 +7,10 @@ import {
 	buildCommands,
 	commandId,
 	commandPayload,
+	DEFAULT_ICON,
 	DEFAULT_PRIORITY,
 	emptyState,
+	ICON_IDS,
 	normalizeState,
 	slugify,
 } from '../lib/core/model.js';
@@ -20,6 +22,7 @@ function detected(key, priority = DEFAULT_PRIORITY) {
 		label: `npm run ${key}`,
 		detail: '',
 		command: `npm run ${key}`,
+		manifest: 'package.json',
 		argv: ['npm', 'run', key],
 		priority,
 		adapter: 'node-npm',
@@ -62,6 +65,7 @@ test('normalizeState drops unknown fields and survives hostile input', () => {
 		defaultId: 'a:b',
 		hidden: ['x'],
 		custom: [],
+		overrides: {},
 	});
 	const custom = normalizeState({
 		custom: [
@@ -72,7 +76,7 @@ test('normalizeState drops unknown fields and survives hostile input', () => {
 			null,
 		],
 	});
-	assert.deepEqual(custom.custom, [{ id: 'custom:one', label: 'One', command: 'one' }]);
+	assert.deepEqual(custom.custom, [{ id: 'custom:one', label: 'One', command: 'one', icon: 'default' }]);
 });
 
 test('the default is the highest-ranked visible command, then the declared one', () => {
@@ -126,8 +130,10 @@ test('the wire payload carries display facts only', () => {
 		'command',
 		'detail',
 		'hidden',
+		'icon',
 		'id',
 		'label',
+		'manifest',
 		'source',
 	]);
 	assert.equal('argv' in payload, false, 'the browser never sends a program back');
@@ -153,7 +159,12 @@ test('applyAction sets, hides, shows, adds, and removes', () => {
 
 	state = applyAction(state, { action: 'add-custom', label: 'Start the database', command: 'docker compose up -d' }, built.commands);
 	assert.deepEqual(state.custom, [
-		{ id: 'custom:start-the-database', label: 'Start the database', command: 'docker compose up -d' },
+		{
+			id: 'custom:start-the-database',
+			label: 'Start the database',
+			command: 'docker compose up -d',
+			icon: 'default',
+		},
 	]);
 
 	state = applyAction(state, { action: 'add-custom', label: 'Start the database', command: 'again' }, [
@@ -200,4 +211,99 @@ test('a project cannot define unbounded commands', () => {
 	};
 	const built = buildCommands({ detected: [], state: full });
 	refusesWith(() => applyAction(full, { action: 'add-custom', label: 'one more', command: 'true' }, built.commands));
+});
+
+test('every command wears the default icon until one is chosen', () => {
+	const built = buildCommands({ detected: [detected('dev')], state: emptyState() });
+	assert.equal(DEFAULT_ICON, 'default');
+	assert.equal(built.commands[0].icon, 'default');
+	assert.equal(commandPayload(built.commands[0]).icon, 'default');
+});
+
+test('the manifest that declared a command travels to the browser', () => {
+	const built = buildCommands({ detected: [detected('dev')], state: emptyState() });
+	assert.equal(commandPayload(built.commands[0]).manifest, 'package.json');
+	const custom = buildCommands({
+		detected: [],
+		state: { ...emptyState(), custom: [{ id: 'custom:x', label: 'X', command: 'x' }] },
+	});
+	assert.equal(commandPayload(custom.commands[0]).manifest, '', 'user commands have no manifest');
+});
+
+test('a stored override renames a detected command and survives normalization', () => {
+	const state = normalizeState({
+		overrides: {
+			'node-npm:dev': { label: 'Arrancar el front', icon: 'sparkle' },
+			'node-npm:lint': { label: '' },
+			'node-npm:test': { icon: 'not-an-icon' },
+			'': { label: 'no id' },
+			'node-npm:build': 'nonsense',
+		},
+	});
+	assert.deepEqual(state.overrides, {
+		'node-npm:dev': { label: 'Arrancar el front', icon: 'sparkle' },
+	});
+	const built = buildCommands({ detected: [detected('dev')], state });
+	assert.equal(built.commands[0].label, 'Arrancar el front');
+	assert.equal(built.commands[0].icon, 'sparkle');
+	assert.equal(built.commands[0].baseLabel, 'npm run dev', 'the adapter label stays recoverable');
+});
+
+test('editing a detected command stores only what changed', () => {
+	const built = buildCommands({ detected: [detected('dev')], state: emptyState() });
+	let state = applyAction(
+		{ ...emptyState() },
+		{ action: 'edit', id: 'node-npm:dev', label: 'Front', icon: 'play' },
+		built.commands,
+	);
+	assert.deepEqual(state.overrides['node-npm:dev'], { label: 'Front', icon: 'play' });
+
+	// Restoring the adapter's label and the default icon drops the override
+	// instead of leaving a no-op behind.
+	state = applyAction(state, { action: 'edit', id: 'node-npm:dev', label: 'npm run dev', icon: 'default' }, built.commands);
+	assert.deepEqual(state.overrides, {});
+
+	const renamed = buildCommands({ detected: [detected('dev')], state: {
+		...emptyState(),
+		overrides: { 'node-npm:dev': { label: 'Front' } },
+	} });
+	assert.equal(renamed.commands[0].icon, 'default', 'a rename leaves the icon alone');
+});
+
+test('editing a user-defined command changes its text and icon', () => {
+	const state = {
+		...emptyState(),
+		custom: [{ id: 'custom:seed', label: 'Seed', command: 'npm run db:seed', icon: 'database' }],
+	};
+	const built = buildCommands({ detected: [], state });
+	const next = applyAction(
+		state,
+		{ action: 'edit', id: 'custom:seed', label: 'Seed the database', command: 'npm run db:seed --fresh', icon: 'data' },
+		built.commands,
+	);
+	assert.deepEqual(next.custom, [
+		{
+			id: 'custom:seed',
+			label: 'Seed the database',
+			command: 'npm run db:seed --fresh',
+			icon: 'data',
+		},
+	]);
+});
+
+test('icons are validated against the published set', () => {
+	assert.ok(ICON_IDS.includes('default'));
+	assert.ok(ICON_IDS.length > 8, 'the picker offers a real choice');
+	const built = buildCommands({ detected: [detected('dev')], state: emptyState() });
+	refusesWith(() => applyAction(emptyState(), { action: 'edit', id: 'node-npm:dev', label: 'x', icon: 'nope' }, built.commands));
+	refusesWith(() => applyAction(emptyState(), { action: 'add-custom', label: 'x', command: 'y', icon: 'nope' }, built.commands));
+	const added = applyAction(emptyState(), { action: 'add-custom', label: 'x', command: 'y', icon: 'gauge' }, built.commands);
+	assert.equal(added.custom[0].icon, 'gauge');
+	const plain = applyAction(emptyState(), { action: 'add-custom', label: 'x', command: 'y' }, built.commands);
+	assert.equal(plain.custom[0].icon, 'default', 'an absent icon is the default');
+});
+
+test('editing an unknown command is refused', () => {
+	const built = buildCommands({ detected: [detected('dev')], state: emptyState() });
+	refusesWith(() => applyAction(emptyState(), { action: 'edit', id: 'node-npm:missing', label: 'x' }, built.commands));
 });

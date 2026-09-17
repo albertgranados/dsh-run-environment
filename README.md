@@ -17,7 +17,12 @@ Node.js projects are detected today (`package.json` scripts, ranked so the play 
 `dev`). Everything else is a first-class citizen through user-defined commands, and adapters for
 other environments are the project's main axis of growth — the header asks the project, not npm.
 
-![The command menu: detected commands, custom commands, and management](docs/assets/menu-custom.png)
+![The command menu: commands grouped by manifest, custom commands, and management](docs/assets/menu.png)
+
+Every row carries its icon and its own options; **Edit…** renames a command and picks a different
+glyph, without touching the manifest:
+
+![The edit dialog: rename a command and choose its icon](docs/assets/edit-dialog.png)
 
 ---
 
@@ -25,7 +30,11 @@ other environments are the project's main axis of growth — the header asks the
 
 - **Detection, not configuration.** A `package.json` with scripts is enough: no manifest to write, no
   path to teach the plugin. Detection is adapter-based, so other environments plug into the same
-  model.
+  model, and the menu groups commands by the file that declared them (`package.json`, `Makefile`, …).
+- **Rename and give them icons.** Every row carries an icon — a neutral asterisk until you pick
+  another — and its own options: **Set as default**, or **Edit…** to rename it and choose a glyph.
+  A user-defined command's command line is editable too; a detected one's is not, because it belongs
+  to the manifest.
 - **A play button that means something.** The default is `dev`, then `start`, then whatever the
   manifest declares first — ranked by the adapter, resolved on the host.
 - **Run and stop.** While a command is alive the button turns into a stop button; stopping terminates
@@ -38,7 +47,7 @@ other environments are the project's main axis of growth — the header asks the
   control red and carries its last output line in the tooltip.
 - **Zero runtime dependencies.** The host half imports nothing but Node built-ins and the harness's
   own packages; the browser half is served verbatim by the harness, so installing from git costs one
-  command and no build step. 61 tests run offline with `node --test`.
+  command and no build step. 72 tests run offline with `node --test`.
 
 ## Install
 
@@ -54,6 +63,21 @@ Then restart the harness and reload the browser page. The plugin declares `dsh.b
 `dsh plugin` reconciles `dsh.profile.bundles` itself — no profile file to edit by hand.
 
 Uninstall with `dsh plugin --profile web remove dsh-run-environment`.
+
+## Managing what is in the menu
+
+Each row's three-dot handle opens **Set as default** and **Edit…**:
+
+![A command row's options: set as default, or edit](docs/assets/row-options.png)
+
+- **Set as default** moves the play button onto that command. Running a command from the menu also
+  makes it the default, so the button follows the last thing you picked.
+- **Edit…** renames the command and chooses its icon. A user-defined command's command line is
+  editable there too; a detected command's is not, because it belongs to the manifest — the dialog
+  says so instead of pretending.
+- **Hide a command** (in **Manage**) takes a detected command out of the menu; it stays restorable
+  from **Show hidden (n)**. User-defined commands are deleted rather than hidden, since nothing would
+  bring them back.
 
 ## How it works
 
@@ -72,7 +96,7 @@ program name. Every route sits behind the harness's own Host/Origin fence and lo
 | `GET /run-environment/commands?cwd=<abs>` | Detected and user-defined commands, the resolved default, and the live run table. |
 | `POST /run-environment/run` | `{ cwd, id }` → start that command (and remember it as the default). |
 | `POST /run-environment/stop` | `{ cwd, id }` → terminate that run's process group. |
-| `POST /run-environment/state` | `{ cwd, action, … }` → set the default, hide, show, add, or delete. |
+| `POST /run-environment/state` | `{ cwd, action, … }` → `set-default`, `edit`, `hide`, `show`, `add-custom`, or `remove-custom`. |
 | `GET /run-environment/log?cwd=&id=&bytes=` | Collected output tail of one run. |
 
 Design notes, the request flow, and the adapter contract live in

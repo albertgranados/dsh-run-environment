@@ -7,6 +7,23 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-17
+
+### Added
+
+- **Per-command icons** — every command in the menu carries an icon; the default is a neutral
+  asterisk, and the add/edit dialogs offer a validated picker. The icon set is owned by the host and
+  served to the browser at `GET /commands`.
+- **Rename a command** — the row options offer **Edit…**, which renames any command and, for a
+  user-defined one, also edits its command line. Detected commands keep the command line their
+  manifest declares; only the displayed name and icon are overridable, and restoring the adapter's
+  label drops the override.
+- **Per-row options** — each command row ends in a three-dot handle opening **Set as default** and
+  **Edit…**, so both actions are reachable without running the command first.
+- **Manifest-grouped menu** — detected commands are grouped under the file that declared them
+  (`package.json`, `Makefile`, …) instead of a generic "Detected" heading. Adapters declare this with
+  the new `manifest` field of a detected command.
+
 ## [0.1.0] - 2026-09-17
 
 First release: the concept, the architecture, and the Node.js adapter.
@@ -40,5 +57,6 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/albertgranados/dsh-run-environment/releases/tag/v0.1.0

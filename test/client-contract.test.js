@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
+import { ICON_IDS } from '../lib/core/model.js';
+
 /** Every icon/components export the bundle may destructure. */
 const primitiveNames = [
 	'Button',
@@ -8,13 +10,26 @@ const primitiveNames = [
 	'Menu',
 	'Modal',
 	'Tooltip',
+	'IconAlarmClockOutline16',
+	'IconApiOutline14',
+	'IconBranchOutline16',
+	'IconChecklistOutline14',
 	'IconChevronDownOutline14',
 	'IconCodeOutline16',
-	'IconListPenOutline16',
+	'IconCordisPluginOutline14',
+	'IconDataOutline16',
+	'IconDatabaseOutline16',
+	'IconEllipsisOutline16',
+	'IconFolderOpenOutline16',
+	'IconGaugeOutline16',
+	'IconGlobeOutline14',
 	'IconLoadingOutline16',
 	'IconPlayOutline16',
 	'IconPlusOutline16',
+	'IconRefreshOutline16',
+	'IconSparkle16',
 	'IconStopFill16',
+	'IconWarningOutline16',
 ];
 
 /** A React stand-in: enough for module scope, never asked to render. */
@@ -74,6 +89,23 @@ test('the factory exports the cordis plugin contract and injects its stylesheet'
 	assert.equal(styleTags.length, 1, 'the stylesheet is injected exactly once');
 	assert.equal(styleTags[0].dataset.plugin, 'dsh-run-environment');
 	assert.match(styleTags[0].textContent, /RUNENV_split/);
+});
+
+test('the picker knows every icon the host validates against', async () => {
+	const { registration } = await loadBundle();
+	const loaded = registration.factory((specifier) => {
+		if (specifier === 'react') return react;
+		if (specifier === '@deepseek-ai/dsh-client-ui-primitives') {
+			return Object.fromEntries(primitiveNames.map((name) => [name, () => null]));
+		}
+		throw new Error(`unexpected require: ${specifier}`);
+	});
+	for (const icon of ICON_IDS) {
+		assert.ok(
+			loaded.__icons.includes(icon),
+			`the host offers "${icon}" but the browser half cannot draw it`,
+		);
+	}
 });
 
 test('apply registers key-identical dictionaries and one header slot', async () => {

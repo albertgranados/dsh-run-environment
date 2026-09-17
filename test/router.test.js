@@ -226,6 +226,43 @@ test('POST /state hides, shows, and defines commands', async (t) => {
 	assert.equal(remove.json.commands.some((command) => command.source === 'custom'), false);
 });
 
+test('GET /commands publishes the icon set the picker offers', async (t) => {
+	const { call, directory } = await fixture(t);
+	const payload = (await call(`/commands?cwd=${encodeURIComponent(directory)}`)).json;
+	assert.ok(Array.isArray(payload.icons));
+	assert.ok(payload.icons.includes('default'));
+	assert.equal(payload.commands.every((command) => payload.icons.includes(command.icon)), true);
+});
+
+test('POST /state renames a detected command and picks its icon', async (t) => {
+	const { call, directory } = await fixture(t);
+	const edited = await call(
+		'/state',
+		json({ cwd: directory, action: 'edit', id: 'node-npm:dev', label: 'Arrancar el front', icon: 'sparkle' }),
+	);
+	assert.equal(edited.statusCode, 200);
+	const dev = edited.json.commands.find((command) => command.id === 'node-npm:dev');
+	assert.equal(dev.label, 'Arrancar el front');
+	assert.equal(dev.icon, 'sparkle');
+	assert.equal(dev.command, 'npm run dev', 'the command line still comes from the manifest');
+	assert.equal(dev.manifest, 'package.json');
+
+	const unknownIcon = await call(
+		'/state',
+		json({ cwd: directory, action: 'edit', id: 'node-npm:dev', label: 'x', icon: 'nope' }),
+	);
+	assert.equal(unknownIcon.statusCode, 400);
+	assert.match(unknownIcon.json.message, /unknown icon/);
+});
+
+test('POST /state sets the default without running anything', async (t) => {
+	const { call, directory } = await fixture(t);
+	const res = await call('/state', json({ cwd: directory, action: 'set-default', id: 'node-npm:build' }));
+	assert.equal(res.statusCode, 200);
+	assert.equal(res.json.defaultId, 'node-npm:build');
+	assert.deepEqual(res.json.state.hidden, []);
+});
+
 test('GET /log returns the collected tail as text', async (t) => {
 	const { call, directory } = await fixture(t);
 	await call('/run', json({ cwd: directory, id: 'node-npm:dev' }));
