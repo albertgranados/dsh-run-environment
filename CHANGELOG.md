@@ -7,6 +7,18 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-09-17
+
+### Added
+
+- **Hiding moved onto the row it applies to.** A detected command's options now offer **Hide**, and a
+  hidden one offers **Unhide** — the same place its name and icon are edited. **Manage** is left with
+  the one thing that has no row of its own: *Add command…*.
+- **An eye in each section heading** reveals that section's hidden commands, dimmed to a reduced
+  opacity, so they can be taken back out of hiding without leaving the menu. A revealed hidden command
+  is listed but not runnable: its row does nothing and it is not offered as a default, because the host
+  refuses to run it while it is hidden.
+
 ## [0.2.9] - 2026-09-17
 
 ### Changed
@@ -161,7 +173,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.9...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.9...v0.3.0
 [0.2.9]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.8...v0.2.9
 [0.2.8]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.7...v0.2.8
 [0.2.7]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.6...v0.2.7

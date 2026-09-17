@@ -76,9 +76,12 @@ them:
 - **Edit** renames the command and chooses its icon. A user-defined command's command line is editable
   there too; a detected command's is not, because it belongs to the manifest — the dialog says so
   instead of pretending.
-- **Delete** removes a command you defined, and is offered only for those. A detected command belongs
-  to its manifest, so **Manage → Hide a command** hides it instead, and **Show hidden (n)** brings it
-  back.
+- **Hide** takes a detected command out of the menu, and **Unhide** puts it back. Only commands that
+  belong to a manifest offer it; a command you defined is deleted instead.
+- The **eye** at the right of a section heading shows that section's hidden commands, dimmed, so you
+  can reach their options without leaving the menu.
+
+![The same menu with a section's hidden commands revealed and dimmed](docs/assets/menu-hidden.png)
 
 ## How it works
 
