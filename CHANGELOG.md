@@ -7,6 +7,15 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.9] - 2026-09-17
+
+### Changed
+
+- **The `default` pill is grey at rest.** The primitive paints itself with layer-2, which is
+  near-white and left the badge almost invisible on the menu surface. It now wears the interactive
+  grey at rest, and inverts to layer-2 while the row itself turns grey under the pointer, so it reads
+  as a marker in both states.
+
 ## [0.2.8] - 2026-09-17
 
 ### Changed
@@ -152,7 +161,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.8...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.9...HEAD
+[0.2.9]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.8...v0.2.9
 [0.2.8]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.7...v0.2.8
 [0.2.7]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.6...v0.2.7
 [0.2.6]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.5...v0.2.6
