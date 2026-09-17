@@ -7,6 +7,17 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.5] - 2026-09-17
+
+### Changed
+
+- **Selected and focused states are drawn at a weight you can see.** A hairline border renders as a
+  single translucent device pixel on a 1x display, which reads as a rendering fault rather than a
+  state. The selected icon in the picker now carries a double ring, a focused input field doubles its
+  border with an inset ring, every control this plugin owns draws a 2px focus ring, and the failure
+  dress is 2px like the rest. Nothing moves when a state changes: the rings are shadows, not wider
+  borders.
+
 ## [0.2.4] - 2026-09-17
 
 ### Fixed
@@ -106,7 +117,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.4...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.5...HEAD
+[0.2.5]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.4...v0.2.5
 [0.2.4]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.1...v0.2.2
