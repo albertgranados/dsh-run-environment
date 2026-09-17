@@ -7,6 +7,15 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.6.2] - 2026-09-17
+
+### Changed
+
+- **Pressing a running command's row asks before stopping it.** The status dot is an indicator; the
+  row is both how a command starts and how it ends, so pressing a live one opens the confirmation
+  rather than trying to start it again. **Cancel** leaves it running, **Stop** ends it. The header
+  button still stops outright, because it wears a stop icon while something is alive.
+
 ## [0.6.1] - 2026-09-17
 
 ### Fixed
@@ -227,7 +236,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.1...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.2...HEAD
+[0.6.2]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.4.0...v0.5.0
