@@ -38,6 +38,11 @@ glyph, without touching the manifest:
   manifest declares first — ranked by the adapter, resolved on the host.
 - **Run and stop.** While a command is alive the button turns into a stop button; stopping terminates
   the whole process group (`npm → sh → the dev server`), not just the parent.
+- **You can see what is running.** A live command's row swaps its icon for the harness's green status
+  dot, wherever it sits in the list — including commands that are not the default. Pressing the dot
+  asks before stopping, so a stray click cannot kill a dev server mid-thought.
+
+![A running command's row, with the green status dot in place of its icon](docs/assets/menu-running.png)
 - **Any command, any environment.** Add your own commands from the menu (`docker compose up -d`,
   `python manage.py runserver`, …). They run in the project directory through your shell.
 - **Quiet by default.** Commands you never run can be hidden; hidden ones stay restorable and always
@@ -83,6 +88,8 @@ them:
   belong to a manifest offer it; a command you defined is deleted instead.
 - **Drag a row** to move it. The order is remembered per project; the default stays first and hidden
   commands stay last, so what you can run is never mixed with what you cannot.
+- A row whose command is **alive** wears the green status dot instead of its icon. Pressing the dot
+  opens a confirmation — the row itself only ever runs things.
 - **Show all** at the right of a section heading reveals that section's hidden commands, dimmed, so
   they can be taken back out of hiding without leaving the menu. **Show less** hides them again.
 

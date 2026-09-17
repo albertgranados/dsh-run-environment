@@ -7,6 +7,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-09-17
+
+### Added
+
+- **A running command shows the harness's green status dot** where its icon normally sits, so what is
+  alive is visible at a glance — including commands that are not the default and would otherwise look
+  idle. Pressing the dot opens a confirmation and stops the process only on **Stop**; the row itself
+  never stops anything, so a stray click cannot kill a dev server. When the command ends the icon
+  comes back. A menu with anything alive keeps polling, so the dot appears without reopening the list.
+
 ## [0.5.0] - 2026-09-17
 
 ### Added
@@ -206,7 +216,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.9...v0.3.0
