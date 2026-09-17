@@ -7,6 +7,18 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.7.3] - 2026-09-17
+
+### Added
+
+- **The console remembers what it read.** A harness restart forgets every run, and the tab — which the
+  Sidebar keeps — used to go blank and report the loss. It now keeps its last output per console and
+  shows it while saying what happened, so a restart leaves a readable console and a **Run again**
+  button instead of an empty panel.
+- **The console follows its own output**, the way a console does: it keeps the newest line in view
+  until the reader scrolls up to look at something older, and resumes following when they come back
+  to the bottom.
+
 ## [0.7.2] - 2026-09-17
 
 ### Added
@@ -306,7 +318,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.2...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.3...HEAD
+[0.7.3]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.2...v0.7.3
 [0.7.2]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.4...v0.7.0
