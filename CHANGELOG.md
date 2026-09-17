@@ -7,6 +7,18 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.4] - 2026-09-17
+
+### Fixed
+
+- **A row's options work under a physical mouse.** The options menu is portaled to the document body,
+  which makes it "outside" the command list — and the list dismisses itself on `pointerdown`, which
+  fires *before* the `click` that would pick an option. The menu was therefore torn down mid-gesture:
+  "Edit…" did nothing at all with a real mouse, while every scripted click worked, because
+  `element.click()` never sends a `pointerdown`. The option items now stop the pointer event, so the
+  list stays open and the click lands. Verification now uses the full real gesture sequence; the
+  checklist in [CONTRIBUTING.md](CONTRIBUTING.md#verifying-a-ui-change) explains how.
+
 ## [0.2.3] - 2026-09-17
 
 ### Added
@@ -94,7 +106,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.3...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.4...HEAD
+[0.2.4]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.0...v0.2.1

@@ -72,6 +72,23 @@ and a `BREAKING CHANGE:` footer.
   it keeps installation to one command and the test suite offline.
 - **A `CHANGELOG.md` entry** under `## Unreleased`.
 
+### Verifying a UI change
+
+Scripted browser checks are worth having, but **a synthetic click is not a click**. `element.click()`
+skips hit-testing and, more importantly, skips the `pointerdown` the harness menus listen for on
+`document` to dismiss themselves — which is exactly how a portaled menu can be torn down between the
+press and the release, leaving a control that works in a test and does nothing under a mouse.
+
+A real gesture is this sequence, dispatched on `document.elementFromPoint(x, y)` rather than on the
+element you believe you are clicking:
+
+```
+pointerover, pointerenter, pointermove, pointerdown, mousedown, pointerup, mouseup, click
+```
+
+Re-check by hand after touching the header control: a single click, a **double** click, a click on the
+dialog's mask, `Escape`, and Cancel. Each of those found a real bug at least once.
+
 ## Style
 
 - ES modules, two-space indentation, single quotes, semicolons. Match the file you are editing.
