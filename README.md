@@ -43,6 +43,10 @@ glyph, without touching the manifest:
   asks before stopping it, so a stray click cannot kill a dev server mid-thought.
 
 ![A running command's row, with the green status dot in place of its icon](docs/assets/menu-running.png)
+
+Pressing that row asks before it stops:
+
+![The stop confirmation a running command's row opens](docs/assets/row-stop.png)
 - **Any command, any environment.** Add your own commands from the menu (`docker compose up -d`,
   `python manage.py runserver`, …). They run in the project directory through your shell.
 - **Quiet by default.** Commands you never run can be hidden; hidden ones stay restorable and always
