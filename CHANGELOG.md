@@ -7,6 +7,15 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.6.3] - 2026-09-17
+
+### Changed
+
+- **Every way of stopping asks first.** The header button joined the row and the status dot: pressing
+  it while a command is alive opens the same confirmation, and only **Stop** ends the process. Its
+  tooltip says so — "Ask before stopping npm run dev" — instead of promising a stop it will not perform
+  on its own.
+
 ## [0.6.2] - 2026-09-17
 
 ### Changed
@@ -236,7 +245,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.2...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.3...HEAD
+[0.6.3]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.5.0...v0.6.0
