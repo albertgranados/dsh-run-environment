@@ -126,15 +126,22 @@ test('apply registers key-identical dictionaries and one header slot', async () 
 	let dictionaries = null;
 	/** @type {{entry: object, component: unknown} | null} */
 	let slot = null;
+	/** @type {object[]} callbacks cordis would run once a service appears. */
+	const pendingInjects = [];
 	const context = {
 		effect: (body) => {
 			body();
+		},
+		inject: (deps, callback) => {
+			pendingInjects.push({ deps, callback });
+			return () => {};
 		},
 		locale: {
 			register: (namespace, dicts) => {
 				dictionaries = { namespace, dicts };
 				return () => {};
 			},
+			bind: (namespace) => (key) => `${namespace}:${key}`,
 		},
 		slots: {
 			inject: (name, register) => register(name),
@@ -154,6 +161,42 @@ test('apply registers key-identical dictionaries and one header slot', async () 
 	}
 	for (const [key, value] of Object.entries(dictionaries.dicts.zh)) {
 		assert.equal(typeof value, 'string', `${key} must be a template string`);
+	}
+
+	// The run console rides the Sidebar's own public two-stage path: the type into
+	// the registry, the body and the chip into their keyed seats under its id.
+	const types = [];
+	const seats = [];
+	const rightContext = {
+		effect: (body) => {
+			body();
+		},
+		sidebarRight: { openResource: () => {} },
+		sidebarRightTabs: {
+			register: (definition) => {
+				types.push(definition);
+				return () => {};
+			},
+		},
+		slots: {
+			inject: (name, register) => register(name),
+			register: (entry, component) => {
+				seats.push({ entry, component });
+			},
+		},
+	};
+	for (const pending of pendingInjects) {
+		if (pending.deps.includes('sidebarRightTabs')) pending.callback(rightContext);
+	}
+	assert.equal(types.length, 1, 'one tab type is registered');
+	assert.equal(types[0].kind, 'run-console');
+	assert.deepEqual(types[0].patterns, ['dsh-resource://run-console/**']);
+	assert.equal(typeof types[0].title('dsh-resource://run-console/x/y'), 'string');
+	const seatNames = seats.map((seat) => seat.entry.name).sort();
+	assert.deepEqual(seatNames, ['sidebar.right.pane.tab', 'sidebar.right.pane.tab.title']);
+	for (const seat of seats) {
+		assert.equal(seat.entry.key, types[0].id, 'the seats are keyed by the type id');
+		assert.equal(typeof seat.component, 'function');
 	}
 
 	assert.ok(slot !== null, 'the header slot was registered');

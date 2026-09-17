@@ -42,6 +42,10 @@ glyph, without touching the manifest:
 - **You can see what is running.** A live command's row swaps its icon for the harness's green status
   dot, wherever it sits in the list — including commands that are not the default. Pressing that row
   asks before stopping it, so a stray click cannot kill a dev server mid-thought.
+- **Every run gets a console.** Launching a command opens its output in the harness's own right
+  Sidebar: one tab per command, live, with the run's state and a way to stop it. It needs no extra
+  plugin — it rides the Sidebar's public tab API, and a client without that Sidebar simply runs
+  commands as it always did.
 
 ![A running command's row, with the green status dot in place of its icon](docs/assets/menu-running.png)
 
@@ -79,6 +83,19 @@ Then restart the harness and reload the browser page. The plugin declares `dsh.b
 `dsh plugin` reconciles `dsh.profile.bundles` itself — no profile file to edit by hand.
 
 Uninstall with `dsh plugin --profile web remove dsh-run-environment`.
+
+## The run console
+
+![One run's console in the harness's right Sidebar](docs/assets/run-console.png)
+
+Running a command reveals the right Sidebar on a tab named after that command. Its bar carries the same
+status dot the menu uses, the command line, and a **Stop** button that asks before it kills anything;
+the body streams the run's output while it is alive and keeps it afterwards, with the exit state
+reading as *Finished*, *Stopped* or *Failed*.
+
+Each command keeps its own tab: running a second command opens a second console instead of replacing
+the first, and running one again focuses the console it already has. The tabs belong to the session, so
+each conversation shows its own.
 
 ## Managing what is in the menu
 
@@ -122,7 +139,7 @@ program name. Every route sits behind the harness's own Host/Origin fence and lo
 | `POST /run-environment/run` | `{ cwd, id }` → start that command (and remember it as the default). |
 | `POST /run-environment/stop` | `{ cwd, id }` → terminate that run's process group. |
 | `POST /run-environment/state` | `{ cwd, action, … }` → `set-default`, `edit`, `reorder`, `hide`, `show`, `add-custom`, or `remove-custom`. |
-| `GET /run-environment/log?cwd=&id=&bytes=` | Collected output tail of one run. |
+| `GET /run-environment/log?cwd=&id=&bytes=` | Collected output tail of one run. `format=json` returns the same tail under `output`, with the run beside it. |
 
 Design notes, the request flow, and the adapter contract live in
 [docs/architecture.md](docs/architecture.md) and [docs/adapters.md](docs/adapters.md).

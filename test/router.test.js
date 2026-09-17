@@ -245,6 +245,23 @@ test('POST /state reorders the menu', async (t) => {
 	assert.equal(refused.statusCode, 400);
 });
 
+test('GET /log serves the same tail as text or as JSON', async (t) => {
+	const { call, directory } = await fixture(t);
+	const started = await call('/run', json({ cwd: directory, id: 'node-npm:dev' }));
+	const id = started.json.run.id;
+	await new Promise((resolve) => setTimeout(resolve, 400));
+
+	const plain = await call(`/log?cwd=${encodeURIComponent(directory)}&id=${encodeURIComponent(id)}`);
+	assert.equal(plain.headers['content-type'], 'text/plain; charset=utf-8');
+
+	const asJson = await call(`/log?format=json&cwd=${encodeURIComponent(directory)}&id=${encodeURIComponent(id)}`);
+	assert.equal(asJson.statusCode, 200);
+	assert.equal(typeof asJson.json.output, 'string');
+	assert.equal(asJson.json.run.id, id);
+	assert.equal(asJson.json.text, undefined, 'the JSON shape must not trip the text branch');
+	await call('/stop', json({ cwd: directory, id }));
+});
+
 test('GET /commands names the build it is serving', async (t) => {
 	const { call, directory } = await fixture(t);
 	const manifest = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));

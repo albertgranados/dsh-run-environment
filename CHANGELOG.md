@@ -7,6 +7,25 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-09-17
+
+### Added
+
+- **A console per run, in the harness's own right Sidebar.** Launching a command now reveals the
+  Sidebar on a tab named after that command: the same status dot the menu uses, the command line, a
+  **Stop** button that asks first, and the run's output streaming while it is alive. Each command
+  keeps its own tab — a second command opens a second console, re-running one focuses the console it
+  already has — and the tabs belong to the session, so they survive a conversation switch.
+- **`GET /log?format=json`**, which returns the same tail as `output` with the run beside it: the
+  console needs both, and one round trip beats two.
+
+### Notes
+
+- The console rides the Sidebar's documented public path — the tab type into `ctx.sidebarRightTabs`,
+  the body and the chip into their keyed seats under the type's id — so it is a tab like any other and
+  needs no third-party panel. Both services are injected optionally: a client without that Sidebar
+  still runs commands, it just has no console to show them in.
+
 ## [0.6.4] - 2026-09-17
 
 ### Changed
@@ -253,7 +272,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.4...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.4...v0.7.0
 [0.6.4]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.3...v0.6.4
 [0.6.3]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/albertgranados/dsh-run-environment/compare/v0.6.1...v0.6.2
