@@ -1,0 +1,61 @@
+name: Bug report
+description: Something the plugin does wrong, or does not do at all
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. For anything security-sensitive, use
+        [SECURITY.md](https://github.com/albertgranados/dsh-run-environment/blob/main/SECURITY.md)
+        instead of this form.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you saw, including the exact text of any error.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open a session in a project with a package.json
+        2. Click the play button
+        3. …
+    validations:
+      required: true
+  - type: input
+    id: project-kind
+    attributes:
+      label: The project it happened in
+      description: Language, package manager, and the relevant manifest file (please do not paste secrets).
+      placeholder: Node.js · npm · package.json with scripts
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Run these and paste the output.
+      value: |
+        - `node --version`:
+        - `dsh --version`:
+        - plugin version (`node -p "require('dsh-run-environment/package.json').version"`):
+        - OS:
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Plugin configuration
+      description: The output of `dsh --profile web --dump-config | grep -A5 run-environment`, if you changed any option.
+      render: yaml
+    validations:
+      required: false

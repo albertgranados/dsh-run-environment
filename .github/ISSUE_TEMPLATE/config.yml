@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security report
+    url: https://github.com/albertgranados/dsh-run-environment/security/advisories/new
+    about: Report a vulnerability privately instead of opening an issue.
+  - name: How to write an adapter
+    url: https://github.com/albertgranados/dsh-run-environment/blob/main/docs/adapters.md
+    about: The contract, a worked example, and the checklist for a new environment.

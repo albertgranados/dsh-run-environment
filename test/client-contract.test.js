@@ -1,0 +1,129 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+
+/** Every icon/components export the bundle may destructure. */
+const primitiveNames = [
+	'Button',
+	'Input',
+	'Menu',
+	'Modal',
+	'Tooltip',
+	'IconChevronDownOutline14',
+	'IconCodeOutline16',
+	'IconListPenOutline16',
+	'IconLoadingOutline16',
+	'IconPlayOutline16',
+	'IconPlusOutline16',
+	'IconStopFill16',
+];
+
+/** A React stand-in: enough for module scope, never asked to render. */
+const react = {
+	createElement: () => null,
+	Fragment: 'Fragment',
+	useCallback: (callback) => callback,
+	useEffect: () => {},
+	useMemo: (compute) => compute(),
+	useRef: () => ({ current: undefined }),
+	useState: (initial) => [initial, () => {}],
+};
+
+/**
+ * Load the browser bundle the way the harness does: install the loader on
+ * `window`, import the file, and keep the registration it publishes.
+ * @returns {Promise<object>} the registration.
+ */
+async function loadBundle() {
+	/** @type {object | null} */
+	let registration = null;
+	const styleTags = [];
+	globalThis.window = {
+		__ModuleLoader__: {
+			load: (definition) => {
+				registration = definition;
+			},
+		},
+	};
+	globalThis.document = {
+		querySelector: () => null,
+		createElement: () => ({ dataset: {} }),
+		head: { appendChild: (tag) => styleTags.push(tag) },
+	};
+	await import(`../lib/client.js?cache-bust=${String(Math.random())}`);
+	assert.ok(registration !== null, 'the bundle registered itself with the module loader');
+	return { registration, styleTags };
+}
+
+test('the client bundle registers under the package name', async () => {
+	const { registration } = await loadBundle();
+	assert.equal(registration.id, 'dsh-run-environment');
+	assert.equal(typeof registration.factory, 'function');
+});
+
+test('the factory exports the cordis plugin contract and injects its stylesheet', async () => {
+	const { registration, styleTags } = await loadBundle();
+	const loaded = registration.factory((specifier) => {
+		if (specifier === 'react') return react;
+		if (specifier === '@deepseek-ai/dsh-client-ui-primitives') {
+			return Object.fromEntries(primitiveNames.map((name) => [name, () => null]));
+		}
+		throw new Error(`unexpected require: ${specifier}`);
+	});
+	assert.equal(typeof loaded.apply, 'function');
+	assert.deepEqual(loaded.inject, ['sessions', 'slots', 'locale']);
+	assert.equal(styleTags.length, 1, 'the stylesheet is injected exactly once');
+	assert.equal(styleTags[0].dataset.plugin, 'dsh-run-environment');
+	assert.match(styleTags[0].textContent, /RUNENV_split/);
+});
+
+test('apply registers key-identical dictionaries and one header slot', async () => {
+	const { registration } = await loadBundle();
+	const loaded = registration.factory((specifier) => {
+		if (specifier === 'react') return react;
+		if (specifier === '@deepseek-ai/dsh-client-ui-primitives') {
+			return Object.fromEntries(primitiveNames.map((name) => [name, () => null]));
+		}
+		throw new Error(`unexpected require: ${specifier}`);
+	});
+
+	/** @type {object | null} */
+	let dictionaries = null;
+	/** @type {{entry: object, component: unknown} | null} */
+	let slot = null;
+	const context = {
+		effect: (body) => {
+			body();
+		},
+		locale: {
+			register: (namespace, dicts) => {
+				dictionaries = { namespace, dicts };
+				return () => {};
+			},
+		},
+		slots: {
+			inject: (name, register) => register(name),
+			register: (entry, component) => {
+				slot = { entry, component };
+			},
+		},
+	};
+	loaded.apply(context);
+
+	assert.equal(dictionaries.namespace, 'run-environment');
+	const locales = Object.keys(dictionaries.dicts).sort();
+	assert.deepEqual(locales, ['en', 'es', 'zh']);
+	const reference = Object.keys(dictionaries.dicts.zh).sort();
+	for (const locale of locales) {
+		assert.deepEqual(Object.keys(dictionaries.dicts[locale]).sort(), reference, `${locale} must be key-identical`);
+	}
+	for (const [key, value] of Object.entries(dictionaries.dicts.zh)) {
+		assert.equal(typeof value, 'string', `${key} must be a template string`);
+	}
+
+	assert.ok(slot !== null, 'the header slot was registered');
+	assert.equal(slot.entry.name, 'conversation.session.header.utilities');
+	assert.equal(slot.entry.id, 'run-environment');
+	assert.equal(slot.entry.locale, 'run-environment');
+	assert.equal(slot.entry.order, -20);
+	assert.equal(typeof slot.component, 'function');
+});

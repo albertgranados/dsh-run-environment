@@ -1,0 +1,46 @@
+name: Feature request
+description: An environment to support, or a behaviour worth having
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you trying to run, and what makes it awkward today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would like
+      description: A concrete behaviour, not a design document.
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of request
+      options:
+        - A new environment adapter
+        - A change to the control or its menu
+        - Configuration
+        - Documentation
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: detections
+    attributes:
+      label: For an adapter request, how would the environment be detected?
+      description: Which files declare the runnable targets, and what would the commands look like?
+      placeholder: |
+        pyproject.toml → [project.scripts] → `python -m <name>`
+        manage.py → `python manage.py <command>`
+    validations:
+      required: false
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Would you like to work on it?
+      options:
+        - label: I would like to open a pull request for this

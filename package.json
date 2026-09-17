@@ -1,0 +1,70 @@
+{
+  "name": "dsh-run-environment",
+  "version": "0.1.0",
+  "description": "DeepSeek Harness plugin: a Session-header control that detects how a workspace is meant to be run, and runs it. Node.js adapters today, any environment through user-defined commands.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "lib/core",
+    "lib/adapters",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "author": "Albert Granados <albertgranro@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/albertgranados/dsh-run-environment.git"
+  },
+  "homepage": "https://github.com/albertgranados/dsh-run-environment#readme",
+  "bugs": {
+    "url": "https://github.com/albertgranados/dsh-run-environment/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "npm",
+    "scripts",
+    "task-runner",
+    "developer-tools"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-primitives",
+        "@deepseek-ai/dsh-client-store"
+      ]
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2",
+    "@deepseek-ai/dsh-home-paths": "*",
+    "@deepseek-ai/schemastery": "*"
+  }
+}

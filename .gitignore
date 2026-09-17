@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# The package has no dependencies; anything here is a local experiment.
+node_modules/
+
+# Packaging artifacts
+*.tgz

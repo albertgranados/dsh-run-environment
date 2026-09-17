@@ -1,0 +1,18 @@
+# dsh-run-environment bundle patch
+#
+# This file is the `dsh.bundle.patch` layer of the package. Installing the
+# plugin through the harness CLI —
+#
+#   dsh plugin --profile web add github:albertgranados/dsh-run-environment
+#
+# — reconciles `dsh.profile.bundles` against the installed packages and, seeing
+# this declaration, appends `dsh-run-environment` to the bundle stack. The
+# profile boot then merges this single-row insert, exactly like a manual
+# cordis.patch.yml mount line.
+#
+# The browser half ships through package.json's `dsh.client` declaration, so
+# this node row is what makes the plugin — and its client bundle — visible to
+# both halves of the harness.
+- insert:
+    - id: run-environment
+      name: 'dsh-run-environment'
