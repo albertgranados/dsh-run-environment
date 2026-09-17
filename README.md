@@ -66,7 +66,8 @@ Uninstall with `dsh plugin --profile web remove dsh-run-environment`.
 
 ## Managing what is in the menu
 
-Each row's three-dot handle opens **Set as default** and **Edit…**:
+Each row's three-dot handle opens **Set as default** and **Edit…** on top of the list, which stays
+open behind them:
 
 ![A command row's options: set as default, or edit](docs/assets/row-options.png)
 

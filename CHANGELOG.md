@@ -7,6 +7,17 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-09-17
+
+### Fixed
+
+- **The command list no longer closes when a row's options open.** The three-dot menu stacks next to
+  the row it belongs to, so choosing options never loses sight of the list; closing either closes
+  both.
+- **Section headings always name the source.** A group of detected commands is titled by the file
+  that declared them, and a host that cannot name that file falls back to the adapter id — the
+  generic "Detected" heading is gone from the dictionaries entirely.
+
 ## [0.2.0] - 2026-09-17
 
 ### Added
@@ -57,6 +68,7 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/albertgranados/dsh-run-environment/releases/tag/v0.1.0
