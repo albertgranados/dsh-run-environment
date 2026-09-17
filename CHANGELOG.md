@@ -7,6 +7,15 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.7] - 2026-09-17
+
+### Added
+
+- **The default command says so in the menu.** Its row carries a `default` pill, so which command the
+  play button runs is visible without running anything or remembering. The pill keeps its width and
+  the name is the part that gives way: a long command truncates with an ellipsis instead of squeezing
+  the badge out of the row.
+
 ## [0.2.6] - 2026-09-17
 
 ### Changed
@@ -134,7 +143,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.6...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.7...HEAD
+[0.2.7]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.6...v0.2.7
 [0.2.6]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.5...v0.2.6
 [0.2.5]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.4...v0.2.5
 [0.2.4]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.3...v0.2.4

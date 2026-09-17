@@ -9,6 +9,7 @@ const primitiveNames = [
 	'Input',
 	'Menu',
 	'Modal',
+	'Pill',
 	'Tooltip',
 	'IconAlarmClockOutline16',
 	'IconApiOutline14',
