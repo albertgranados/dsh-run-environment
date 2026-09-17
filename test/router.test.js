@@ -158,7 +158,8 @@ test('GET /commands reports the detected model', async (t) => {
 	assert.deepEqual(payload.adapters, ['node-npm']);
 	assert.deepEqual(
 		payload.commands.map((command) => command.id),
-		['node-npm:build', 'node-npm:dev', 'node-npm:lint'],
+		['node-npm:dev', 'node-npm:build', 'node-npm:lint'],
+		'the default leads, then detection order',
 	);
 	assert.equal(payload.defaultId, 'node-npm:dev', 'dev outranks manifest order');
 	assert.deepEqual(payload.runs, []);
@@ -225,6 +226,23 @@ test('POST /state hides, shows, and defines commands', async (t) => {
 
 	const remove = await call('/state', json({ cwd: directory, action: 'remove-custom', id: custom.id }));
 	assert.equal(remove.json.commands.some((command) => command.source === 'custom'), false);
+});
+
+test('POST /state reorders the menu', async (t) => {
+	const { call, directory } = await fixture(t);
+	const res = await call(
+		'/state',
+		json({ cwd: directory, action: 'reorder', order: ['node-npm:lint', 'node-npm:dev', 'node-npm:build'] }),
+	);
+	assert.equal(res.statusCode, 200);
+	assert.deepEqual(res.json.state.order, ['node-npm:lint', 'node-npm:dev', 'node-npm:build']);
+	assert.deepEqual(
+		res.json.commands.map((command) => command.id),
+		['node-npm:dev', 'node-npm:lint', 'node-npm:build'],
+		'the default is pinned first and the rest follow the saved order',
+	);
+	const refused = await call('/state', json({ cwd: directory, action: 'reorder', order: ['nope'] }));
+	assert.equal(refused.statusCode, 400);
 });
 
 test('GET /commands names the build it is serving', async (t) => {

@@ -66,6 +66,7 @@ test('normalizeState drops unknown fields and survives hostile input', () => {
 		hidden: ['x'],
 		custom: [],
 		overrides: {},
+		order: [],
 	});
 	const custom = normalizeState({
 		custom: [
@@ -100,9 +101,56 @@ test('a hidden command leaves the visible list and releases the default', () => 
 	const built = buildCommands({ detected: [detected('dev', 10), detected('build')], state });
 	assert.equal(built.defaultId, 'node-npm:build');
 	assert.deepEqual(
-		built.commands.map((command) => command.hidden),
-		[true, false],
+		built.commands.map((command) => [command.id, command.hidden]),
+		[
+			['node-npm:build', false],
+			['node-npm:dev', true],
+		],
+		'hidden commands are listed last',
 	);
+});
+
+test('the default is shown first, whatever order things are in', () => {
+	const built = buildCommands({ detected: [detected('build'), detected('dev', 10), detected('start', 20)], state: emptyState() });
+	assert.deepEqual(
+		built.commands.map((command) => command.id),
+		['node-npm:dev', 'node-npm:build', 'node-npm:start'],
+	);
+});
+
+test("the user's order wins over detection order, and the default still leads", () => {
+	const state = { ...emptyState(), defaultId: 'node-npm:dev', order: ['node-npm:lint', 'node-npm:dev', 'node-npm:build'] };
+	const built = buildCommands({
+		detected: [detected('dev', 10), detected('build'), detected('lint')],
+		state,
+	});
+	assert.deepEqual(
+		built.commands.map((command) => command.id),
+		['node-npm:dev', 'node-npm:lint', 'node-npm:build'],
+		'the default is pinned, then the saved order, then anything never moved',
+	);
+});
+
+test('reordering stores exactly what it is given', () => {
+	const state = { ...emptyState(), custom: [{ id: 'custom:x', label: 'X', command: 'x' }] };
+	const built = buildCommands({ detected: [detected('dev'), detected('build')], state });
+	const next = applyAction(state, { action: 'reorder', order: ['node-npm:build', 'custom:x', 'node-npm:dev'] }, built.commands);
+	assert.deepEqual(next.order, ['node-npm:build', 'custom:x', 'node-npm:dev']);
+	refusesWith(() => applyAction(state, { action: 'reorder', order: 'node-npm:dev' }, built.commands));
+	refusesWith(() => applyAction(state, { action: 'reorder', order: ['node-npm:dev', 'node-npm:dev'] }, built.commands));
+	refusesWith(() => applyAction(state, { action: 'reorder', order: ['node-npm:missing'] }, built.commands));
+	refusesWith(() => applyAction(state, { action: 'reorder', order: [42] }, built.commands));
+});
+
+test('deleting a command forgets where it sat', () => {
+	const state = {
+		...emptyState(),
+		custom: [{ id: 'custom:x', label: 'X', command: 'x' }],
+		order: ['custom:x', 'node-npm:dev'],
+	};
+	const built = buildCommands({ detected: [detected('dev')], state });
+	const next = applyAction(state, { action: 'remove-custom', id: 'custom:x' }, built.commands);
+	assert.deepEqual(next.order, ['node-npm:dev']);
 });
 
 test('user-defined commands join the list after the detected ones', () => {

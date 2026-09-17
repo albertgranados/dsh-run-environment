@@ -7,6 +7,23 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-09-17
+
+### Added
+
+- **Drag a row to reorder the menu.** The order is remembered per project as `order` in the project's
+  preferences. It reads as a hint rather than the final word: the default command is always displayed
+  first and hidden commands always last, and anything the user never moved keeps its manifest order
+  after everything that was moved.
+- **`POST /state` gained a `reorder` action**, which validates that every entry names a command of the
+  project and that none is repeated.
+
+### Changed
+
+- **The section eye became `Show all` / `Show less`.** A word says what it does better than a glyph
+  did, and the eye is now reserved for the row options, where it means hide or unhide a single
+  command. Hidden commands are always listed at the bottom of their section, dimmed.
+
 ## [0.3.0] - 2026-09-17
 
 ### Added
@@ -173,7 +190,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.9...v0.3.0
 [0.2.9]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.8...v0.2.9
 [0.2.8]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.7...v0.2.8

@@ -1,6 +1,6 @@
 {
   "name": "dsh-run-environment",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "DeepSeek Harness plugin: a Session-header control that detects how a workspace is meant to be run, and runs it. Node.js adapters today, any environment through user-defined commands.",
   "type": "module",
   "main": "lib/index.js",

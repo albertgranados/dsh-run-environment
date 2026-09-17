@@ -41,8 +41,11 @@ glyph, without touching the manifest:
   the whole process group (`npm → sh → the dev server`), not just the parent.
 - **Any command, any environment.** Add your own commands from the menu (`docker compose up -d`,
   `python manage.py runserver`, …). They run in the project directory through your shell.
-- **Quiet by default.** Commands you never run can be hidden; hidden ones stay restorable. A
-  workspace with nothing detected and nothing configured renders nothing at all.
+- **Quiet by default.** Commands you never run can be hidden; hidden ones stay restorable and always
+  sort to the bottom. A workspace with nothing detected and nothing configured renders nothing at all.
+- **Put them in the order you want.** Drag a row to move it and the order is remembered per project.
+  The default is always the first row of its section, so the thing the play button runs is always
+  where you look first.
 - **Failures surfaced where you are looking.** A command that dies right after launch paints the
   control red and carries its last output line in the tooltip.
 - **Zero runtime dependencies.** The host half imports nothing but Node built-ins and the harness's
@@ -78,8 +81,10 @@ them:
   instead of pretending.
 - **Hide** takes a detected command out of the menu, and **Unhide** puts it back. Only commands that
   belong to a manifest offer it; a command you defined is deleted instead.
-- The **eye** at the right of a section heading shows that section's hidden commands, dimmed, so you
-  can reach their options without leaving the menu.
+- **Drag a row** to move it. The order is remembered per project; the default stays first and hidden
+  commands stay last, so what you can run is never mixed with what you cannot.
+- **Show all** at the right of a section heading reveals that section's hidden commands, dimmed, so
+  they can be taken back out of hiding without leaving the menu. **Show less** hides them again.
 
 ![The same menu with a section's hidden commands revealed and dimmed](docs/assets/menu-hidden.png)
 
@@ -100,7 +105,7 @@ program name. Every route sits behind the harness's own Host/Origin fence and lo
 | `GET /run-environment/commands?cwd=<abs>` | Detected and user-defined commands, the resolved default, and the live run table. |
 | `POST /run-environment/run` | `{ cwd, id }` → start that command (and remember it as the default). |
 | `POST /run-environment/stop` | `{ cwd, id }` → terminate that run's process group. |
-| `POST /run-environment/state` | `{ cwd, action, … }` → `set-default`, `edit`, `hide`, `show`, `add-custom`, or `remove-custom`. |
+| `POST /run-environment/state` | `{ cwd, action, … }` → `set-default`, `edit`, `reorder`, `hide`, `show`, `add-custom`, or `remove-custom`. |
 | `GET /run-environment/log?cwd=&id=&bytes=` | Collected output tail of one run. |
 
 Design notes, the request flow, and the adapter contract live in
