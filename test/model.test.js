@@ -77,7 +77,9 @@ test('normalizeState drops unknown fields and survives hostile input', () => {
 			null,
 		],
 	});
-	assert.deepEqual(custom.custom, [{ id: 'custom:one', label: 'One', command: 'one', icon: 'default' }]);
+	assert.deepEqual(custom.custom, [
+		{ id: 'custom:one', label: 'One', command: 'one', icon: 'default', description: '' },
+	]);
 });
 
 test('the default is the highest-ranked visible command, then the declared one', () => {
@@ -176,6 +178,7 @@ test('the wire payload carries display facts only', () => {
 	assert.deepEqual(Object.keys(payload).sort(), [
 		'adapter',
 		'command',
+		'description',
 		'detail',
 		'hidden',
 		'icon',
@@ -212,6 +215,7 @@ test('applyAction sets, hides, shows, adds, and removes', () => {
 			label: 'Start the database',
 			command: 'docker compose up -d',
 			icon: 'default',
+			description: '',
 		},
 	]);
 
@@ -335,6 +339,7 @@ test('editing a user-defined command changes its text and icon', () => {
 			label: 'Seed the database',
 			command: 'npm run db:seed --fresh',
 			icon: 'data',
+			description: '',
 		},
 	]);
 });
@@ -354,4 +359,71 @@ test('icons are validated against the published set', () => {
 test('editing an unknown command is refused', () => {
 	const built = buildCommands({ detected: [detected('dev')], state: emptyState() });
 	refusesWith(() => applyAction(emptyState(), { action: 'edit', id: 'node-npm:missing', label: 'x' }, built.commands));
+});
+
+test('a description is optional and survives a round trip', () => {
+	const withText = applyAction(
+		emptyState(),
+		{
+			action: 'add-custom',
+			label: 'Start the database',
+			command: 'docker compose up -d',
+			description: '  Brings up Postgres on 5432.  ',
+		},
+		buildCommands({ detected: [], state: emptyState() }).commands,
+	);
+	assert.equal(withText.custom[0].description, 'Brings up Postgres on 5432.');
+
+	const blank = applyAction(
+		emptyState(),
+		{ action: 'add-custom', label: 'X', command: 'x', description: '   ' },
+		buildCommands({ detected: [], state: emptyState() }).commands,
+	);
+	assert.equal(blank.custom[0].description, '', 'an empty description is no description');
+
+	const built = buildCommands({ detected: [], state: withText });
+	assert.equal(commandPayload(built.commands[0]).description, 'Brings up Postgres on 5432.');
+
+	const refused = (value) =>
+		refusesWith(() =>
+			applyAction(
+				emptyState(),
+				{ action: 'add-custom', label: 'X', command: 'x', description: value },
+				built.commands,
+			),
+		);
+	refused('y'.repeat(161));
+	refused(42);
+	refused('broken\u0000text');
+});
+
+test('a detected command can be given a description, and have it taken away', () => {
+	const built = buildCommands({ detected: [detected('dev')], state: emptyState() });
+	let state = applyAction(
+		emptyState(),
+		{ action: 'edit', id: 'node-npm:dev', label: 'npm run dev', icon: 'default', description: 'The dev server' },
+		built.commands,
+	);
+	assert.deepEqual(state.overrides['node-npm:dev'], { description: 'The dev server' });
+	assert.equal(commandPayload(buildCommands({ detected: [detected('dev')], state }).commands[0]).description, 'The dev server');
+
+	state = applyAction(
+		state,
+		{ action: 'edit', id: 'node-npm:dev', label: 'npm run dev', icon: 'default', description: '' },
+		built.commands,
+	);
+	assert.deepEqual(state.overrides, {}, 'clearing the description leaves no empty override behind');
+});
+
+test('normalizeState keeps descriptions and repairs unusable ones', () => {
+	const state = normalizeState({
+		custom: [
+			{ id: 'custom:a', label: 'A', command: 'a', description: 'Explains A' },
+			{ id: 'custom:b', label: 'B', command: 'b', description: 7 },
+		],
+		overrides: { 'node-npm:dev': { description: 'Explains dev' } },
+	});
+	assert.equal(state.custom[0].description, 'Explains A');
+	assert.equal(state.custom[1].description, '', 'a non-string description reads as absent');
+	assert.equal(state.overrides['node-npm:dev'].description, 'Explains dev');
 });

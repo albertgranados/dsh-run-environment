@@ -38,7 +38,7 @@ test('a mutation persists and is visible to a second store instance', async (t) 
 
 	const reopened = new ProjectStore({ file });
 	assert.deepEqual((await reopened.read('/some/project')).custom, [
-		{ id: 'custom:seed', label: 'Seed', command: 'npm run db:seed', icon: 'default' },
+		{ id: 'custom:seed', label: 'Seed', command: 'npm run db:seed', icon: 'default', description: '' },
 	]);
 });
 

@@ -31,10 +31,9 @@ glyph, without touching the manifest:
 - **Detection, not configuration.** A `package.json` with scripts is enough: no manifest to write, no
   path to teach the plugin. Detection is adapter-based, so other environments plug into the same
   model, and the menu groups commands by the file that declared them (`package.json`, `Makefile`, …).
-- **Rename and give them icons.** Every row carries an icon — a neutral asterisk until you pick
-  another — and its own options: **Set as default**, **Edit** (rename it, choose a glyph) and, for a
-  command you defined yourself, **Delete**. A user-defined command's command line is editable too; a
-  detected one's is not, because it belongs to the manifest.
+- **Rename them, describe them, give them icons.** Every row carries an icon — a neutral asterisk
+  until you pick another — and its own options: **Set as default**, **Edit** (rename it, choose a
+  glyph, write an optional description) and, for a command you defined yourself, **Delete**.
 - **A play button that means something.** The default is `dev`, then `start`, then whatever the
   manifest declares first — ranked by the adapter, resolved on the host.
 - **Run and stop.** While a command is alive the button turns into a stop button; stopping terminates
@@ -76,9 +75,10 @@ them:
 
 - **Set as default** moves the play button onto that command. Running a command from the menu also
   makes it the default, so the button follows the last thing you picked.
-- **Edit** renames the command and chooses its icon. A user-defined command's command line is editable
-  there too; a detected command's is not, because it belongs to the manifest — the dialog says so
-  instead of pretending.
+- **Edit** renames the command, chooses its icon, and writes an optional **description** that appears
+  when you hover the row. The command line itself is shown locked: a detected command's belongs to its
+  manifest, and a user-defined one *is* the command — renaming it should never silently change what
+  runs.
 - **Hide** takes a detected command out of the menu, and **Unhide** puts it back. Only commands that
   belong to a manifest offer it; a command you defined is deleted instead.
 - **Drag a row** to move it. The order is remembered per project; the default stays first and hidden

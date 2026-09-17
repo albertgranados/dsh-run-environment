@@ -7,6 +7,22 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-09-17
+
+### Added
+
+- **A description per command.** Nobody should have to read a shell line to know what a command is
+  for: **Edit** (and **Add command…**) now take an optional description of up to 160 characters, and
+  it appears when the row is hovered — and in the play button's tooltip when that command is the
+  default. It is stored as `description` on a user-defined command, or in the command's `overrides`
+  entry when it belongs to a manifest, so clearing it leaves nothing behind.
+
+### Changed
+
+- **The command line is shown locked in the editor.** It used to be an editable field for user-defined
+  commands; renaming a command should not be able to change what it runs by accident. The dialog shows
+  the line in a disabled field with a note underneath explaining where it comes from.
+
 ## [0.4.0] - 2026-09-17
 
 ### Added
@@ -190,7 +206,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.9...v0.3.0
 [0.2.9]: https://github.com/albertgranados/dsh-run-environment/compare/v0.2.8...v0.2.9
