@@ -7,6 +7,20 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.8.1] - 2026-09-17
+
+### Fixed
+
+- **Every row's icon is centred on its title.** The glyphs are drawn by inline SVGs, and an inline SVG
+  keeps a line box under its drawing: the icon slot centred that box, so the glyph itself sat about a
+  pixel and a half high in every row — most visible with the asterisk the default icon uses. A glyph is
+  a block now, so the drawing is what the slot centres. Measured: the glyph's centre moved from 1.5px
+  above the title's to 0.5px below it, the same half-pixel the slot itself reports.
+- **A console whose harness cannot serve the output says so.** "No output yet" looks the same whether
+  a command has not printed yet or the host predates the request for its output. The console now tells
+  the two apart and, in the second case, names the reason and the remedy: this harness is older than
+  this console, restart the harness.
+
 ## [0.8.0] - 2026-09-17
 
 ### Changed
@@ -348,7 +362,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.8.1...HEAD
+[0.8.1]: https://github.com/albertgranados/dsh-run-environment/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.4...v0.8.0
 [0.7.4]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.3...v0.7.4
 [0.7.3]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.2...v0.7.3
