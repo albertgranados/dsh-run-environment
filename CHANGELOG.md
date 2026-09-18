@@ -7,6 +7,17 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.7.4] - 2026-09-17
+
+### Fixed
+
+- **A console reads whatever build answers it.** Reloading the page brings a new client while the
+  harness keeps running the plugin it loaded at boot, so a console could meet a host that predates it:
+  that host serves the log route as plain text, the client asked for JSON, and the parse failure was
+  reported as an unreachable host — with no output on screen, for every command. The console now takes
+  the tail in either shape and, when the answer carries no run facts, reads those from the command
+  list, which every version serves.
+
 ## [0.7.3] - 2026-09-17
 
 ### Added
@@ -318,7 +329,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.3...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.4...HEAD
+[0.7.4]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.3...v0.7.4
 [0.7.3]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.2...v0.7.3
 [0.7.2]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.0...v0.7.1
