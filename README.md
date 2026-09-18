@@ -97,9 +97,11 @@ Each command keeps its own tab: running a second command opens a second console 
 the first, and running one again focuses the console it already has. The tabs belong to the session, so
 each conversation shows its own.
 
-A console keeps reading the host, and it reads whatever the host can answer: a build older than the
-console serves the same tail as plain text, and the console takes it rather than turning a version
-mismatch into an error. It stays honest about what it is showing. If the harness restarts
+A console reads through the same route the menu already uses — the command list, with `logs=1` folding
+each run's tail into the same answer — so it needs no second route that anything in between could
+filter. Against a host older than the console, which does not fold the tail in, it falls back to the
+log route in either shape, and if that route is unreachable too it shows the run's state without
+pretending the host is gone. It stays honest about what it is showing. If the harness restarts
 underneath it — which forgets every run — the tab says the run is no longer known instead of pretending,
 and if a read fails it names what failed (the host answering, or the host being unreachable) and retries
 without losing the output already on screen. Whenever the command is not running, the bar offers **Run

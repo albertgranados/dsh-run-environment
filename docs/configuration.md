@@ -81,6 +81,9 @@ It is plain JSON and safe to edit by hand while the harness is stopped:
 - `order` — the order the rows were dragged into. It is a hint, not the final word: the default is
   always displayed first and hidden commands always last, and anything missing from the list keeps its
   natural (manifest) order after everything that is in it. An empty list means "natural order".
+- `GET /commands?logs=1` folds each run's retained tail into the same answer, which is how a console
+  reads a run and its output in one request. The plain list stays as light as it was, because the
+  header polls it every couple of seconds.
 - `icon` and `overrides[].icon` — one of the ids in `ICON_IDS` (`lib/core/model.js`), served to the
   browser at `GET /commands` and offered by the picker in the add/edit dialogs. `"default"` is the
   neutral asterisk. An unknown id is refused on write (400) and repaired to `"default"` on read, so a

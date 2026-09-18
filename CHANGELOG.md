@@ -7,6 +7,25 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-09-17
+
+### Changed
+
+- **A console reads through the route the menu already uses.** It had a second route of its own —
+  `/log` — and a console whose only job is to show a run was therefore the one surface that broke when
+  something in between filtered that path: the fetch died, the client called it an unreachable host,
+  and the console showed nothing for every command while the rest of the plugin worked. The command
+  list now takes `logs=1` and folds each run's tail into its answer, so a console needs one request to
+  one route, and the plain list stays as light as it was for the header's poll.
+- Against a host older than the client — the case a page reload creates, since the harness keeps the
+  plugin it loaded at boot — the console falls back to the log route in either shape, and if that route
+  is unreachable as well it shows the run's state without an error line, because a run's state is
+  exactly what it cannot guess.
+
+### Added
+
+- `GET /commands?logs=1`, documented in `docs/configuration.md`.
+
 ## [0.7.4] - 2026-09-17
 
 ### Fixed
@@ -329,7 +348,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.4...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.4...v0.8.0
 [0.7.4]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.3...v0.7.4
 [0.7.3]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.2...v0.7.3
 [0.7.2]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.1...v0.7.2

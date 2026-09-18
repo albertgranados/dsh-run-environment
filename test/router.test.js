@@ -228,6 +228,21 @@ test('POST /state hides, shows, and defines commands', async (t) => {
 	assert.equal(remove.json.commands.some((command) => command.source === 'custom'), false);
 });
 
+test('GET /commands can fold each run tail into the same answer', async (t) => {
+	const { call, directory } = await fixture(t);
+	await call('/run', json({ cwd: directory, id: 'node-npm:dev' }));
+	await new Promise((resolve) => setTimeout(resolve, 500));
+
+	const plain = await call(`/commands?cwd=${encodeURIComponent(directory)}`);
+	assert.equal(plain.json.runs[0].tail, undefined, 'the menu poll stays as light as it was');
+
+	const withLogs = await call(`/commands?logs=1&cwd=${encodeURIComponent(directory)}`);
+	const run = withLogs.json.runs[0];
+	assert.equal(typeof run.tail, 'string');
+	assert.ok(run.tail.length > 0 || run.state === 'running');
+	await call('/stop', json({ cwd: directory, id: 'node-npm:dev' }));
+});
+
 test('POST /state reorders the menu', async (t) => {
 	const { call, directory } = await fixture(t);
 	const res = await call(
