@@ -7,6 +7,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.8.2] - 2026-09-17
+
+### Fixed
+
+- **The header button's glyph is the same grey as the command list's.** The list is painted by the
+  Sidebar's own icon slot, which uses the tertiary label colour, while the button inherited the primary
+  one — so the same play icon read darker there than in the menu. Both now measure `rgb(129, 133, 140)`.
+  The status dot keeps its own colour, which is the point of it: it still measures the same green the
+  rows use.
+
 ## [0.8.1] - 2026-09-17
 
 ### Fixed
@@ -362,7 +372,8 @@ First release: the concept, the architecture, and the Node.js adapter.
 - **61 tests** with `node:test`, no dependencies, offline, covering the model, the workspace layer,
   the registry, the store, the runner, the HTTP surface, and the client bundle contract.
 
-[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.8.1...HEAD
+[Unreleased]: https://github.com/albertgranados/dsh-run-environment/compare/v0.8.2...HEAD
+[0.8.2]: https://github.com/albertgranados/dsh-run-environment/compare/v0.8.1...v0.8.2
 [0.8.1]: https://github.com/albertgranados/dsh-run-environment/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.4...v0.8.0
 [0.7.4]: https://github.com/albertgranados/dsh-run-environment/compare/v0.7.3...v0.7.4
